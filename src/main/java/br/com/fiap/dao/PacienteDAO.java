@@ -2,7 +2,6 @@ package br.com.fiap.dao;
 
 import br.com.fiap.to.PacienteTO;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -10,12 +9,24 @@ import java.util.ArrayList;
 public class PacienteDAO {
 
     public PacienteTO save(PacienteTO paciente) {
-        String sql = "INSERT INTO DDD_REMEDIOS(nome, preco, data_de_fabricacao, data_de_validade) VALUES(?, ?, ?, ?)";
+        String sql = "INSERT INTO T_HR_PACIENTES(nome, email, sexo, telefone_id, status, consultasRestantes, faltas, possuiDeficiencia, tipoDeficiencia, videoEnviado, dataNascimento, endereco_id, preferenciaContato, dataCadastro, ultimaAtualizacao, acompanhante_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
-            preparedStatement.setString(1, remedio.getNome());
-            preparedStatement.setDouble(2, remedio.getPreco());
-            preparedStatement.setDate(3, Date.valueOf(remedio.getDataFabricacao()));
-            preparedStatement.setDate(4, Date.valueOf(remedio.getDataValidade()));
+            preparedStatement.setString(1, paciente.getNome());
+            preparedStatement.setString(2, paciente.getEmail());
+            preparedStatement.setString(3, paciente.getSexo());
+            preparedStatement.setLong(4, paciente.getTelefone().getId());
+            preparedStatement.setString(5, paciente.getStatus());
+            preparedStatement.setInt(6, paciente.getConsultasRestantes());
+            preparedStatement.setInt(7, paciente.getFaltas());
+            preparedStatement.setString(8, paciente.isPossuiDeficiencia() ? "1" : "0");
+            preparedStatement.setString(9, paciente.getTipoDeficiencia());
+            preparedStatement.setString(10, paciente.isVideoEnviado() ? "1" : "0");
+            preparedStatement.setDate(11,  java.sql.Date.valueOf(paciente.getDataNascimento()));
+            preparedStatement.setLong(12, paciente.getEndereco().getId);
+            preparedStatement.setString(13, paciente.getPreferenciaContato());
+            preparedStatement.setTimestamp(14, java.sql.Timestamp.valueOf(paciente.getDataCadastro()));
+            preparedStatement.setTimestamp(15, java.sql.Timestamp.valueOf(paciente.getUltimaAtualizacao()));
+            preparedStatement.setLong(16, paciente.getAcompanhante().getId());
             if (preparedStatement.executeUpdate() > 0) {
                 return paciente;
             } else {
@@ -31,13 +42,25 @@ public class PacienteDAO {
     }
 
     public PacienteTO update(Long id, PacienteTO paciente) {
-        String sql = "UPDATE DDD_REMEDIOS SET nome = ?, preco = ?, data_de_fabricacao = ?, data_de_validade = ? WHERE id = ?";
+        String sql = "UPDATE T_HR_PACIENTES SET nome = ?, email = ?, sexo = ?, telefone_id = ?, status = ?, consultasRestantes = ?, faltas = ?, possuiDeficiencia = ?, tipoDeficiencia = ?, videoEnviado = ?, dataNascimento = ?, endereco_id = ?, preferenciaContato = ?, dataCadastro = ?, ultimaAtualizacao = ?, acompanhante_id = ? WHERE id = ?";
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
-            preparedStatement.setString(1, remedio.getNome());
-            preparedStatement.setDouble(2, remedio.getPreco());
-            preparedStatement.setDate(3, Date.valueOf(remedio.getDataFabricacao()));
-            preparedStatement.setDate(4, Date.valueOf(remedio.getDataValidade()));
-            preparedStatement.setLong(5, id);
+            preparedStatement.setString(1, paciente.getNome());
+            preparedStatement.setString(2, paciente.getEmail());
+            preparedStatement.setString(3, paciente.getSexo());
+            preparedStatement.setLong(4, paciente.getTelefone().getId());
+            preparedStatement.setString(5, paciente.getStatus());
+            preparedStatement.setInt(6, paciente.getConsultasRestantes());
+            preparedStatement.setInt(7, paciente.getFaltas());
+            preparedStatement.setString(8, paciente.isPossuiDeficiencia() ? "1" : "0");
+            preparedStatement.setString(9, paciente.getTipoDeficiencia());
+            preparedStatement.setString(10, paciente.isVideoEnviado() ? "1" : "0");
+            preparedStatement.setDate(11, java.sql.Date.valueOf(paciente.getDataNascimento()));
+            preparedStatement.setLong(12, paciente.getEndereco().getId);
+            preparedStatement.setString(13, paciente.getPreferenciaContato());
+            preparedStatement.setTimestamp(14, java.sql.Timestamp.valueOf(paciente.getDataCadastro()));
+            preparedStatement.setTimestamp(15, java.sql.Timestamp.valueOf(paciente.getUltimaAtualizacao()));
+            preparedStatement.setLong(16, paciente.getAcompanhante().getId());
+            preparedStatement.setLong(17, paciente.getId());
             if (preparedStatement.executeUpdate() > 0) {
                 return paciente;
             } else {
@@ -53,7 +76,7 @@ public class PacienteDAO {
     }
 
     public boolean delete(Long id) {
-        String sql = "DELETE FROM DDD_REMEDIOS WHERE id = ?";
+        String sql = "DELETE FROM T_HR_PACIENTES WHERE id = ?";
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
             return preparedStatement.executeUpdate() > 0;
@@ -67,7 +90,7 @@ public class PacienteDAO {
     }
 
     public PacienteTO findById(Long id) {
-        String sql = "SELECT * FROM DDD_REMEDIOS WHERE id = ?";
+        String sql = "SELECT * FROM T_HR_PACIENTES WHERE id = ?";
         PacienteTO paciente = null;
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
@@ -90,7 +113,7 @@ public class PacienteDAO {
     }
 
     public ArrayList<PacienteTO> findAll() {
-        String sql = "SELECT * FROM DDD_REMEDIOS ORDER BY ID";
+        String sql = "SELECT * FROM T_HR_PACIENTES ORDER BY ID";
         ArrayList<PacienteTO> pacientes = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
