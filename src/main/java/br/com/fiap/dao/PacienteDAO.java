@@ -22,7 +22,7 @@ public class PacienteDAO {
             preparedStatement.setString(9, paciente.getTipoDeficiencia());
             preparedStatement.setString(10, paciente.isVideoEnviado() ? "1" : "0");
             preparedStatement.setDate(11,  java.sql.Date.valueOf(paciente.getDataNascimento()));
-            preparedStatement.setLong(12, paciente.getEndereco().getId);
+            preparedStatement.setLong(12, paciente.getEndereco().getId());
             preparedStatement.setString(13, paciente.getPreferenciaContato());
             preparedStatement.setTimestamp(14, java.sql.Timestamp.valueOf(paciente.getDataCadastro()));
             preparedStatement.setTimestamp(15, java.sql.Timestamp.valueOf(paciente.getUltimaAtualizacao()));
@@ -55,7 +55,7 @@ public class PacienteDAO {
             preparedStatement.setString(9, paciente.getTipoDeficiencia());
             preparedStatement.setString(10, paciente.isVideoEnviado() ? "1" : "0");
             preparedStatement.setDate(11, java.sql.Date.valueOf(paciente.getDataNascimento()));
-            preparedStatement.setLong(12, paciente.getEndereco().getId);
+            preparedStatement.setLong(12, paciente.getEndereco().getId());
             preparedStatement.setString(13, paciente.getPreferenciaContato());
             preparedStatement.setTimestamp(14, java.sql.Timestamp.valueOf(paciente.getDataCadastro()));
             preparedStatement.setTimestamp(15, java.sql.Timestamp.valueOf(paciente.getUltimaAtualizacao()));
