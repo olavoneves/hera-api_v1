@@ -14,15 +14,15 @@ public class PacienteBO {
         return pacienteDAO.save(paciente);
     }
 
-    public PacienteTO update(Long id, PacienteTO paciente) {
+    public PacienteTO update(PacienteTO paciente) {
         pacienteDAO = new PacienteDAO();
 
         // Se id for vazio
-        if (id == null) {
+        if (paciente.getId() == null) {
             return null;
         }
 
-        return pacienteDAO.update(id, paciente);
+        return pacienteDAO.update(paciente);
     }
 
     public boolean delete(Long id) {

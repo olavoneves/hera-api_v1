@@ -10,6 +10,7 @@ public class PacienteDAO {
 
     public PacienteTO save(PacienteTO paciente) {
         String sql = "INSERT INTO T_HR_PACIENTES(nome, email, sexo, telefone_id, status, consultasRestantes, faltas, possuiDeficiencia, tipoDeficiencia, videoEnviado, dataNascimento, endereco_id, preferenciaContato, dataCadastro, ultimaAtualizacao, acompanhante_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, paciente.getNome());
             preparedStatement.setString(2, paciente.getEmail());
@@ -41,8 +42,9 @@ public class PacienteDAO {
         return null;
     }
 
-    public PacienteTO update(Long id, PacienteTO paciente) {
+    public PacienteTO update(PacienteTO paciente) {
         String sql = "UPDATE T_HR_PACIENTES SET nome = ?, email = ?, sexo = ?, telefone_id = ?, status = ?, consultasRestantes = ?, faltas = ?, possuiDeficiencia = ?, tipoDeficiencia = ?, videoEnviado = ?, dataNascimento = ?, endereco_id = ?, preferenciaContato = ?, dataCadastro = ?, ultimaAtualizacao = ?, acompanhante_id = ? WHERE id = ?";
+
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, paciente.getNome());
             preparedStatement.setString(2, paciente.getEmail());
@@ -99,7 +101,7 @@ public class PacienteDAO {
 
             if (resultSet.next()) {
                 paciente = new PacienteTO();
-
+                // Setar atributos
             } else {
                 return null;
             }
@@ -122,7 +124,7 @@ public class PacienteDAO {
             if (resultSet != null) {
                 while (resultSet.next()) {
                     PacienteTO paciente = new PacienteTO();
-
+                    // Setar atributos
                     pacientes.add(paciente);
                 }
             } else {

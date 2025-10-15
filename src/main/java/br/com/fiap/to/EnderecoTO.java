@@ -1,7 +1,10 @@
 package br.com.fiap.to;
 
+import jakarta.validation.constraints.NotNull;
+
 public class EnderecoTO {
     private Long id;
+    @NotNull
     private String cep;
     private String logradouro;
     private String complemento;

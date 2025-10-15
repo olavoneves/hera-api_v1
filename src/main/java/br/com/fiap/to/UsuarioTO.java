@@ -10,7 +10,7 @@ public class UsuarioTO {
     private String nome;
     @Email @NotNull
     private String email;
-    @NotNull
+    @NotBlank
     private String senha;
 
     public UsuarioTO() {

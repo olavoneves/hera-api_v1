@@ -16,7 +16,6 @@ public class PacienteResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(@Valid PacienteTO paciente) {
-        pacienteBO = new PacienteBO();
         PacienteTO resultado = pacienteBO.save(paciente);
         Response.ResponseBuilder response = null;
 
@@ -26,25 +25,23 @@ public class PacienteResource {
             response = Response.status(400);
         }
         response.entity(resultado);
-
         return response.build();
     }
 
     @PUT
     @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id,@Valid PacienteTO paciente) {
-        pacienteBO = new PacienteBO();
-        PacienteTO resultado = pacienteBO.update(id, paciente);
+        paciente.setId(id);
+        PacienteTO resultado = pacienteBO.update(paciente);
         Response.ResponseBuilder response = null;
 
         if (resultado != null) {
-            response = Response.ok();
+            response = Response.created(null);
         } else {
-            response = Response.status(404);
+            response = Response.status(400);
         }
         response.entity(resultado);
-
         return response.build();
     }
 
@@ -58,7 +55,6 @@ public class PacienteResource {
         } else {
             response = Response.status(404);
         }
-
         return response.build();
     }
 
@@ -66,7 +62,6 @@ public class PacienteResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findById(@PathParam("id") Long id) {
-        pacienteBO = new PacienteBO();
         PacienteTO resultado = pacienteBO.findById(id);
         Response.ResponseBuilder response = null;
 
@@ -76,14 +71,12 @@ public class PacienteResource {
             response = Response.status(404);
         }
         response.entity(resultado);
-
         return response.build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
-        pacienteBO = new PacienteBO();
         ArrayList<PacienteTO> resultado = pacienteBO.findAll();
         Response.ResponseBuilder response = null;
 
@@ -93,7 +86,6 @@ public class PacienteResource {
             response = Response.status(404);
         }
         response.entity(resultado);
-
         return response.build();
     }
 }
