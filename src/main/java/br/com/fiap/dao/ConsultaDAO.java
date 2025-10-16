@@ -87,7 +87,13 @@ public class ConsultaDAO {
             if (resultSet.next()) {
                 consulta = new ConsultaTO();
                 consulta.setId(resultSet.getLong("id"));
-                // Setar Atributos
+                // Setar Paciente e Medico
+                consulta.setDataConsulta(resultSet.getDate("data_consulta").toLocalDate());
+                consulta.setHorarioConsulta(resultSet.getTime("horario_consulta").toLocalTime());
+                consulta.setStatus(resultSet.getString("status"));
+                consulta.setStatus(resultSet.getString("tipo_consulta"));
+                consulta.setStatus(resultSet.getString("observacoes"));
+                consulta.setStatus(resultSet.getString("link_teleconsulta"));
             } else {
                 return null;
             }
@@ -111,7 +117,13 @@ public class ConsultaDAO {
                 while (resultSet.next()) {
                     ConsultaTO consulta = new ConsultaTO();
                     consulta.setId(resultSet.getLong("id"));
-                    // Setar Atributos
+                    // Setar Paciente e Medico
+                    consulta.setDataConsulta(resultSet.getDate("data_consulta").toLocalDate());
+                    consulta.setHorarioConsulta(resultSet.getTime("horario_consulta").toLocalTime());
+                    consulta.setStatus(resultSet.getString("status"));
+                    consulta.setStatus(resultSet.getString("tipo_consulta"));
+                    consulta.setStatus(resultSet.getString("observacoes"));
+                    consulta.setStatus(resultSet.getString("link_teleconsulta"));
                     consultas.add(consulta);
                 }
             } else {

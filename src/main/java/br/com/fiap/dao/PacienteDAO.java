@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class PacienteDAO {
 
     public PacienteTO save(PacienteTO paciente) {
-        String sql = "INSERT INTO T_HR_PACIENTES(nome, email, sexo, telefone_id, status, consultasRestantes, faltas, possuiDeficiencia, tipoDeficiencia, videoEnviado, dataNascimento, endereco_id, preferenciaContato, dataCadastro, ultimaAtualizacao, acompanhante_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO T_HR_PACIENTES(nome, email, sexo, telefone_id, status, consultas_restantes, faltas, possui_deficiencia, tipo_deficiencia, video_enviado, data_nascimento, endereco_id, preferencia_contato, data_cadastro, ultima_atualizacao, acompanhante_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, paciente.getNome());
@@ -43,7 +43,7 @@ public class PacienteDAO {
     }
 
     public PacienteTO update(PacienteTO paciente) {
-        String sql = "UPDATE T_HR_PACIENTES SET nome = ?, email = ?, sexo = ?, telefone_id = ?, status = ?, consultasRestantes = ?, faltas = ?, possuiDeficiencia = ?, tipoDeficiencia = ?, videoEnviado = ?, dataNascimento = ?, endereco_id = ?, preferenciaContato = ?, dataCadastro = ?, ultimaAtualizacao = ?, acompanhante_id = ? WHERE id = ?";
+        String sql = "UPDATE T_HR_PACIENTES SET nome = ?, email = ?, sexo = ?, telefone_id = ?, status = ?, consultas_restantes = ?, faltas = ?, possui_deficiencia = ?, tipo_deficiencia = ?, video_enviado = ?, data_nascimento = ?, endereco_id = ?, preferencia_contato = ?, data_cadastro = ?, ultima_atualizacao = ?, acompanhante_id = ? WHERE id = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, paciente.getNome());
@@ -101,7 +101,15 @@ public class PacienteDAO {
 
             if (resultSet.next()) {
                 paciente = new PacienteTO();
-                // Setar atributos
+                paciente.setId(resultSet.getLong("id"));
+                paciente.setNome(resultSet.getString("nome"));
+                paciente.setEmail(resultSet.getString("email"));
+                paciente.setSexo(resultSet.getString("sexo"));
+                // Setar Telefone
+                paciente.setStatus(resultSet.getString("status"));
+                paciente.setConsultasRestantes(resultSet.getInt("consultas_restantes"));
+                paciente.setFaltas(resultSet.getInt("faltas"));
+                // Setar outros campos
             } else {
                 return null;
             }
@@ -124,7 +132,15 @@ public class PacienteDAO {
             if (resultSet != null) {
                 while (resultSet.next()) {
                     PacienteTO paciente = new PacienteTO();
-                    // Setar atributos
+                    paciente.setId(resultSet.getLong("id"));
+                    paciente.setNome(resultSet.getString("nome"));
+                    paciente.setEmail(resultSet.getString("email"));
+                    paciente.setSexo(resultSet.getString("sexo"));
+                    // Setar Telefone
+                    paciente.setStatus(resultSet.getString("status"));
+                    paciente.setConsultasRestantes(resultSet.getInt("consultas_restantes"));
+                    paciente.setFaltas(resultSet.getInt("faltas"));
+                    // Setar outros campos
                     pacientes.add(paciente);
                 }
             } else {
