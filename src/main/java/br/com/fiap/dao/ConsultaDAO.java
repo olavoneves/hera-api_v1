@@ -87,7 +87,13 @@ public class ConsultaDAO {
             if (resultSet.next()) {
                 consulta = new ConsultaTO();
                 consulta.setId(resultSet.getLong("id"));
-                // Setar Paciente e Medico
+
+                PacienteDAO pacienteDAO = new PacienteDAO();
+                consulta.setPaciente(pacienteDAO.findById(resultSet.getLong("paciente_id")));
+
+                MedicoDAO medicoDAO = new MedicoDAO();
+                consulta.setMedico(medicoDAO.findById(resultSet.getLong("medico_id")));
+
                 consulta.setDataConsulta(resultSet.getDate("data_consulta").toLocalDate());
                 consulta.setHorarioConsulta(resultSet.getTime("horario_consulta").toLocalTime());
                 consulta.setStatus(resultSet.getString("status"));
@@ -117,7 +123,13 @@ public class ConsultaDAO {
                 while (resultSet.next()) {
                     ConsultaTO consulta = new ConsultaTO();
                     consulta.setId(resultSet.getLong("id"));
-                    // Setar Paciente e Medico
+
+                    PacienteDAO pacienteDAO = new PacienteDAO();
+                    consulta.setPaciente(pacienteDAO.findById(resultSet.getLong("paciente_id")));
+
+                    MedicoDAO medicoDAO = new MedicoDAO();
+                    consulta.setMedico(medicoDAO.findById(resultSet.getLong("medico_id")));
+
                     consulta.setDataConsulta(resultSet.getDate("data_consulta").toLocalDate());
                     consulta.setHorarioConsulta(resultSet.getTime("horario_consulta").toLocalTime());
                     consulta.setStatus(resultSet.getString("status"));

@@ -80,7 +80,10 @@ public class AcompanhanteDAO {
             if (resultSet.next()) {
                 acompanhante = new AcompanhanteTO();
                 acompanhante.setId(resultSet.getLong("id"));
-                // Setar Telefone
+
+                TelefoneDAO telefoneDAO = new TelefoneDAO();
+                acompanhante.setTelefone(telefoneDAO.findById(resultSet.getLong("telefone_id")));
+
                 acompanhante.setParentesco(resultSet.getString("parentesco"));
                 acompanhante.setEmail(resultSet.getString("email"));
                 acompanhante.setDataCadastro(resultSet.getTimestamp("data_cadastro").toLocalDateTime());
@@ -107,7 +110,10 @@ public class AcompanhanteDAO {
                 while (resultSet.next()) {
                     AcompanhanteTO acompanhante = new AcompanhanteTO();
                     acompanhante.setId(resultSet.getLong("id"));
-                    // Setar Telefone
+
+                    TelefoneDAO telefoneDAO = new TelefoneDAO();
+                    acompanhante.setTelefone(telefoneDAO.findById(resultSet.getLong("telefone_id")));
+
                     acompanhante.setParentesco(resultSet.getString("parentesco"));
                     acompanhante.setEmail(resultSet.getString("email"));
                     acompanhante.setDataCadastro(resultSet.getTimestamp("data_cadastro").toLocalDateTime());

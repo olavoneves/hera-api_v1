@@ -105,11 +105,27 @@ public class PacienteDAO {
                 paciente.setNome(resultSet.getString("nome"));
                 paciente.setEmail(resultSet.getString("email"));
                 paciente.setSexo(resultSet.getString("sexo"));
-                // Setar Telefone
+
+                TelefoneDAO telefoneDAO = new TelefoneDAO();
+                paciente.setTelefone(telefoneDAO.findById(resultSet.getLong("telefone_id")));
+
                 paciente.setStatus(resultSet.getString("status"));
                 paciente.setConsultasRestantes(resultSet.getInt("consultas_restantes"));
                 paciente.setFaltas(resultSet.getInt("faltas"));
-                // Setar outros campos
+                paciente.setPossuiDeficiencia("1".equals(resultSet.getString("possui_deficiencia")));
+                paciente.setTipoDeficiencia(resultSet.getString("tipo_deficiencia"));
+                paciente.setVideoEnviado("1".equals(resultSet.getString("video_enviado")));
+                paciente.setDataNascimento(resultSet.getDate("data_nascimento").toLocalDate());
+
+                EnderecoDAO enderecoDAO = new EnderecoDAO();
+                paciente.setEndereco(enderecoDAO.findById(resultSet.getLong("endereco_id")));
+
+                paciente.setPreferenciaContato(resultSet.getString("preferencia_contato"));
+                paciente.setDataCadastro(resultSet.getTimestamp("data_cadastro").toLocalDateTime());
+                paciente.setUltimaAtualizacao(resultSet.getTimestamp("ultima_atualizacao").toLocalDateTime());
+
+                AcompanhanteDAO acompanhanteDAO = new AcompanhanteDAO();
+                paciente.setAcompanhante(acompanhanteDAO.findById(resultSet.getLong("acompanhante_id")));
             } else {
                 return null;
             }
@@ -136,11 +152,28 @@ public class PacienteDAO {
                     paciente.setNome(resultSet.getString("nome"));
                     paciente.setEmail(resultSet.getString("email"));
                     paciente.setSexo(resultSet.getString("sexo"));
-                    // Setar Telefone
+
+                    TelefoneDAO telefoneDAO = new TelefoneDAO();
+                    paciente.setTelefone(telefoneDAO.findById(resultSet.getLong("telefone_id")));
+
                     paciente.setStatus(resultSet.getString("status"));
                     paciente.setConsultasRestantes(resultSet.getInt("consultas_restantes"));
                     paciente.setFaltas(resultSet.getInt("faltas"));
-                    // Setar outros campos
+                    paciente.setPossuiDeficiencia("1".equals(resultSet.getString("possui_deficiencia")));
+                    paciente.setTipoDeficiencia(resultSet.getString("tipo_deficiencia"));
+                    paciente.setVideoEnviado("1".equals(resultSet.getString("video_enviado")));
+                    paciente.setDataNascimento(resultSet.getDate("data_nascimento").toLocalDate());
+
+                    EnderecoDAO enderecoDAO = new EnderecoDAO();
+                    paciente.setEndereco(enderecoDAO.findById(resultSet.getLong("endereco_id")));
+
+                    paciente.setPreferenciaContato(resultSet.getString("preferencia_contato"));
+                    paciente.setDataCadastro(resultSet.getTimestamp("data_cadastro").toLocalDateTime());
+                    paciente.setUltimaAtualizacao(resultSet.getTimestamp("ultima_atualizacao").toLocalDateTime());
+
+                    AcompanhanteDAO acompanhanteDAO = new AcompanhanteDAO();
+                    paciente.setAcompanhante(acompanhanteDAO.findById(resultSet.getLong("acompanhante_id")));
+
                     pacientes.add(paciente);
                 }
             } else {

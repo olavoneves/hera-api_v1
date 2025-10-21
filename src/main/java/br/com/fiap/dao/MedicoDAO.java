@@ -85,7 +85,10 @@ public class MedicoDAO {
                 medico.setCrm(resultSet.getString("crm"));
                 medico.setEspecialidade(resultSet.getString("especialidade"));
                 medico.setEmail(resultSet.getString("email"));
-                // Setar Telefone
+
+                TelefoneDAO telefoneDAO = new TelefoneDAO();
+                medico.setTelefone(telefoneDAO.findById(resultSet.getLong("telefone_id")));
+
                 medico.setStatus(resultSet.getString("status"));
             } else {
                 return null;
@@ -114,7 +117,10 @@ public class MedicoDAO {
                     medico.setCrm(resultSet.getString("crm"));
                     medico.setEspecialidade(resultSet.getString("especialidade"));
                     medico.setEmail(resultSet.getString("email"));
-                    // Setar Telefone
+
+                    TelefoneDAO telefoneDAO = new TelefoneDAO();
+                    medico.setTelefone(telefoneDAO.findById(resultSet.getLong("telefone_id")));
+
                     medico.setStatus(resultSet.getString("status"));
                     medicos.add(medico);
                 }
