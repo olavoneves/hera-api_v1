@@ -1,8 +1,10 @@
 package br.com.fiap.to;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public class LoginTO {
+    @Email
     @NotBlank
     private String email;
     @NotBlank
