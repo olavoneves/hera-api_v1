@@ -117,4 +117,23 @@ public class UsuarioDAO {
         }
         return usuarios;
     }
+
+    public String login(String email, String senha) {
+        String sql = "SELECT usuario FROM T_HR_USUARIOS usuario WHERE email = ? AND senha = ?";
+
+        try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setString(2, senha);
+            if (preparedStatement.executeUpdate() > 0) {
+                return "Usuário está autorizado para acessar aplicação";
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println("Erro ao logar usuario: " + e.getMessage());
+        } finally {
+            ConnectionFactory.closeConnection();
+        }
+        return null;
+    }
 }
