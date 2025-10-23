@@ -17,7 +17,7 @@ public class ConnectionFactory {
             final String USERNAME = System.getenv("DB_USERNAME");
             final String PASSWORD = System.getenv("DB_PASSWORD");
 
-            if (URL.isEmpty() || USERNAME.isEmpty() || PASSWORD.isEmpty()) {
+            if (URL == null || USERNAME == null || PASSWORD == null) {
                 throw new RuntimeException("Variáveis de ambiente do banco não configuradas.");
             }
 
