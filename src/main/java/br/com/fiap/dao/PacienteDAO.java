@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class PacienteDAO {
 
     public PacienteTO save(PacienteTO paciente) {
-        String sql = "INSERT INTO T_HR_PACIENTES(nome, email, sexo, telefone_id, status, consultas_restantes, faltas, possui_deficiencia, tipo_deficiencia, video_enviado, data_nascimento, endereco_id, preferencia_contato, data_cadastro, ultima_atualizacao, acompanhante_id) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO T_HR_PACIENTES(nm_paciente, em_paciente, sg_sexo, id_telefone, st_paciente, qt_consultas_restantes, qt_faltas, fl_possui_deficiencia, ds_tipo_deficiencia, fl_video_enviado, dt_nascimento, id_endereco, ds_preferencia_contato, dt_cadastro, dt_ultima_atualizacao, id_acompanhante) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, paciente.getNome());
@@ -43,7 +43,7 @@ public class PacienteDAO {
     }
 
     public PacienteTO update(PacienteTO paciente) {
-        String sql = "UPDATE T_HR_PACIENTES SET nome = ?, email = ?, sexo = ?, telefone_id = ?, status = ?, consultas_restantes = ?, faltas = ?, possui_deficiencia = ?, tipo_deficiencia = ?, video_enviado = ?, data_nascimento = ?, endereco_id = ?, preferencia_contato = ?, data_cadastro = ?, ultima_atualizacao = ?, acompanhante_id = ? WHERE id = ?";
+        String sql = "UPDATE T_HR_PACIENTES SET nm_paciente = ?, em_paciente = ?, sg_sexo = ?, id_telefone = ?, st_paciente = ?, qt_consultas_restantes = ?, qt_faltas = ?, fl_possui_deficiencia = ?, ds_tipo_deficiencia = ?, fl_video_enviado = ?, dt_nascimento = ?, id_endereco = ?, ds_preferencia_contato = ?, dt_cadastro = ?, dt_ultima_atualizacao = ?, id_acompanhante = ? WHERE id_paciente = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, paciente.getNome());
@@ -78,7 +78,7 @@ public class PacienteDAO {
     }
 
     public boolean delete(Long id) {
-        String sql = "DELETE FROM T_HR_PACIENTES WHERE id = ?";
+        String sql = "DELETE FROM T_HR_PACIENTES WHERE id_paciente = ?";
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
             return preparedStatement.executeUpdate() > 0;
@@ -92,7 +92,7 @@ public class PacienteDAO {
     }
 
     public PacienteTO findById(Long id) {
-        String sql = "SELECT * FROM T_HR_PACIENTES WHERE id = ?";
+        String sql = "SELECT * FROM T_HR_PACIENTES WHERE id_paciente = ?";
         PacienteTO paciente = null;
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
@@ -101,31 +101,31 @@ public class PacienteDAO {
 
             if (resultSet.next()) {
                 paciente = new PacienteTO();
-                paciente.setId(resultSet.getLong("id"));
-                paciente.setNome(resultSet.getString("nome"));
-                paciente.setEmail(resultSet.getString("email"));
-                paciente.setSexo(resultSet.getString("sexo"));
+                paciente.setId(resultSet.getLong("id_paciente"));
+                paciente.setNome(resultSet.getString("nm_paciente"));
+                paciente.setEmail(resultSet.getString("em_paciente"));
+                paciente.setSexo(resultSet.getString("sg_sexo"));
 
                 TelefoneDAO telefoneDAO = new TelefoneDAO();
-                paciente.setTelefone(telefoneDAO.findById(resultSet.getLong("telefone_id")));
+                paciente.setTelefone(telefoneDAO.findById(resultSet.getLong("id_telefone")));
 
-                paciente.setStatus(resultSet.getString("status"));
-                paciente.setConsultasRestantes(resultSet.getInt("consultas_restantes"));
-                paciente.setFaltas(resultSet.getInt("faltas"));
-                paciente.setPossuiDeficiencia("1".equals(resultSet.getString("possui_deficiencia")));
-                paciente.setTipoDeficiencia(resultSet.getString("tipo_deficiencia"));
-                paciente.setVideoEnviado("1".equals(resultSet.getString("video_enviado")));
-                paciente.setDataNascimento(resultSet.getDate("data_nascimento").toLocalDate());
+                paciente.setStatus(resultSet.getString("st_paciente"));
+                paciente.setConsultasRestantes(resultSet.getInt("qt_consultas_restantes"));
+                paciente.setFaltas(resultSet.getInt("qt_faltas"));
+                paciente.setPossuiDeficiencia("1".equals(resultSet.getString("fl_possui_deficiencia")));
+                paciente.setTipoDeficiencia(resultSet.getString("ds_tipo_deficiencia"));
+                paciente.setVideoEnviado("1".equals(resultSet.getString("fl_video_enviado")));
+                paciente.setDataNascimento(resultSet.getDate("dt_nascimento").toLocalDate());
 
                 EnderecoDAO enderecoDAO = new EnderecoDAO();
-                paciente.setEndereco(enderecoDAO.findById(resultSet.getLong("endereco_id")));
+                paciente.setEndereco(enderecoDAO.findById(resultSet.getLong("id_endereco")));
 
-                paciente.setPreferenciaContato(resultSet.getString("preferencia_contato"));
-                paciente.setDataCadastro(resultSet.getTimestamp("data_cadastro").toLocalDateTime());
-                paciente.setUltimaAtualizacao(resultSet.getTimestamp("ultima_atualizacao").toLocalDateTime());
+                paciente.setPreferenciaContato(resultSet.getString("ds_preferencia_contato"));
+                paciente.setDataCadastro(resultSet.getTimestamp("dt_cadastro").toLocalDateTime());
+                paciente.setUltimaAtualizacao(resultSet.getTimestamp("dt_ultima_atualizacao").toLocalDateTime());
 
                 AcompanhanteDAO acompanhanteDAO = new AcompanhanteDAO();
-                paciente.setAcompanhante(acompanhanteDAO.findById(resultSet.getLong("acompanhante_id")));
+                paciente.setAcompanhante(acompanhanteDAO.findById(resultSet.getLong("id_acompanhante")));
             } else {
                 return null;
             }
@@ -148,31 +148,31 @@ public class PacienteDAO {
             if (resultSet != null) {
                 while (resultSet.next()) {
                     PacienteTO paciente = new PacienteTO();
-                    paciente.setId(resultSet.getLong("id"));
-                    paciente.setNome(resultSet.getString("nome"));
-                    paciente.setEmail(resultSet.getString("email"));
-                    paciente.setSexo(resultSet.getString("sexo"));
+                    paciente.setId(resultSet.getLong("id_paciente"));
+                    paciente.setNome(resultSet.getString("nm_paciente"));
+                    paciente.setEmail(resultSet.getString("em_paciente"));
+                    paciente.setSexo(resultSet.getString("sg_sexo"));
 
                     TelefoneDAO telefoneDAO = new TelefoneDAO();
-                    paciente.setTelefone(telefoneDAO.findById(resultSet.getLong("telefone_id")));
+                    paciente.setTelefone(telefoneDAO.findById(resultSet.getLong("id_telefone")));
 
-                    paciente.setStatus(resultSet.getString("status"));
-                    paciente.setConsultasRestantes(resultSet.getInt("consultas_restantes"));
-                    paciente.setFaltas(resultSet.getInt("faltas"));
-                    paciente.setPossuiDeficiencia("1".equals(resultSet.getString("possui_deficiencia")));
-                    paciente.setTipoDeficiencia(resultSet.getString("tipo_deficiencia"));
-                    paciente.setVideoEnviado("1".equals(resultSet.getString("video_enviado")));
-                    paciente.setDataNascimento(resultSet.getDate("data_nascimento").toLocalDate());
+                    paciente.setStatus(resultSet.getString("st_paciente"));
+                    paciente.setConsultasRestantes(resultSet.getInt("qt_consultas_restantes"));
+                    paciente.setFaltas(resultSet.getInt("qt_faltas"));
+                    paciente.setPossuiDeficiencia("1".equals(resultSet.getString("fl_possui_deficiencia")));
+                    paciente.setTipoDeficiencia(resultSet.getString("ds_tipo_deficiencia"));
+                    paciente.setVideoEnviado("1".equals(resultSet.getString("fl_video_enviado")));
+                    paciente.setDataNascimento(resultSet.getDate("dt_nascimento").toLocalDate());
 
                     EnderecoDAO enderecoDAO = new EnderecoDAO();
-                    paciente.setEndereco(enderecoDAO.findById(resultSet.getLong("endereco_id")));
+                    paciente.setEndereco(enderecoDAO.findById(resultSet.getLong("id_endereco")));
 
-                    paciente.setPreferenciaContato(resultSet.getString("preferencia_contato"));
-                    paciente.setDataCadastro(resultSet.getTimestamp("data_cadastro").toLocalDateTime());
-                    paciente.setUltimaAtualizacao(resultSet.getTimestamp("ultima_atualizacao").toLocalDateTime());
+                    paciente.setPreferenciaContato(resultSet.getString("ds_preferencia_contato"));
+                    paciente.setDataCadastro(resultSet.getTimestamp("dt_cadastro").toLocalDateTime());
+                    paciente.setUltimaAtualizacao(resultSet.getTimestamp("dt_ultima_atualizacao").toLocalDateTime());
 
                     AcompanhanteDAO acompanhanteDAO = new AcompanhanteDAO();
-                    paciente.setAcompanhante(acompanhanteDAO.findById(resultSet.getLong("acompanhante_id")));
+                    paciente.setAcompanhante(acompanhanteDAO.findById(resultSet.getLong("id_acompanhante")));
 
                     pacientes.add(paciente);
                 }

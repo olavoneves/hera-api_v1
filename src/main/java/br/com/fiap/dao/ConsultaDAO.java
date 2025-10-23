@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class ConsultaDAO {
 
     public ConsultaTO save(ConsultaTO consulta) {
-        String sql = "INSERT INTO T_HR_CONSULTAS(paciente_id, medico_id, data_consulta, horario_consulta, status, tipo_consulta, observacoes, link_teleconsulta) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO T_HR_CONSULTAS(id_paciente, id_medico, dt_consulta, hr_consulta, st_consulta, tp_consulta, ds_observacoes, lk_teleconsulta) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setLong(1, consulta.getPaciente().getId());
@@ -36,7 +36,7 @@ public class ConsultaDAO {
     }
 
     public ConsultaTO update(ConsultaTO consulta) {
-        String sql = "UPDATE T_HR_CONSULTAS SET paciente_id = ?, medico_id = ?, data_consulta = ?, horario_consulta = ?, status = ?, tipo_consulta = ?, observacoes = ?, link_teleconsulta = ? WHERE id = ?";
+        String sql = "UPDATE T_HR_CONSULTAS SET id_paciente = ?, id_medico = ?, dt_consulta = ?, hr_consulta = ?, st_consulta = ?, tp_consulta = ?, ds_observacoes = ?, lk_teleconsulta = ? WHERE id_consulta = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setLong(1, consulta.getPaciente().getId());
@@ -62,7 +62,7 @@ public class ConsultaDAO {
     }
 
     public boolean delete(Long id) {
-        String sql = "DELETE FROM T_HR_CONSULTAS WHERE id = ?";
+        String sql = "DELETE FROM T_HR_CONSULTAS WHERE id_consulta = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -77,7 +77,7 @@ public class ConsultaDAO {
     }
 
     public ConsultaTO findById(Long id) {
-        String sql = "SELECT * FROM T_HR_CONSULTAS WHERE id = ?";
+        String sql = "SELECT * FROM T_HR_CONSULTAS WHERE id_consulta = ?";
         ConsultaTO consulta = null;
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
@@ -86,20 +86,20 @@ public class ConsultaDAO {
 
             if (resultSet.next()) {
                 consulta = new ConsultaTO();
-                consulta.setId(resultSet.getLong("id"));
+                consulta.setId(resultSet.getLong("id_consulta"));
 
                 PacienteDAO pacienteDAO = new PacienteDAO();
-                consulta.setPaciente(pacienteDAO.findById(resultSet.getLong("paciente_id")));
+                consulta.setPaciente(pacienteDAO.findById(resultSet.getLong("id_paciente")));
 
                 MedicoDAO medicoDAO = new MedicoDAO();
-                consulta.setMedico(medicoDAO.findById(resultSet.getLong("medico_id")));
+                consulta.setMedico(medicoDAO.findById(resultSet.getLong("id_medico")));
 
-                consulta.setDataConsulta(resultSet.getDate("data_consulta").toLocalDate());
-                consulta.setHorarioConsulta(resultSet.getTime("horario_consulta").toLocalTime());
-                consulta.setStatus(resultSet.getString("status"));
-                consulta.setStatus(resultSet.getString("tipo_consulta"));
-                consulta.setStatus(resultSet.getString("observacoes"));
-                consulta.setStatus(resultSet.getString("link_teleconsulta"));
+                consulta.setDataConsulta(resultSet.getDate("dt_consulta").toLocalDate());
+                consulta.setHorarioConsulta(resultSet.getTime("hr_consulta").toLocalTime());
+                consulta.setStatus(resultSet.getString("st_consulta"));
+                consulta.setStatus(resultSet.getString("tp_consulta"));
+                consulta.setStatus(resultSet.getString("ds_observacoes"));
+                consulta.setStatus(resultSet.getString("lk_teleconsulta"));
             } else {
                 return null;
             }
@@ -122,20 +122,20 @@ public class ConsultaDAO {
             if (resultSet != null) {
                 while (resultSet.next()) {
                     ConsultaTO consulta = new ConsultaTO();
-                    consulta.setId(resultSet.getLong("id"));
+                    consulta.setId(resultSet.getLong("id_consulta"));
 
                     PacienteDAO pacienteDAO = new PacienteDAO();
-                    consulta.setPaciente(pacienteDAO.findById(resultSet.getLong("paciente_id")));
+                    consulta.setPaciente(pacienteDAO.findById(resultSet.getLong("id_paciente")));
 
                     MedicoDAO medicoDAO = new MedicoDAO();
-                    consulta.setMedico(medicoDAO.findById(resultSet.getLong("medico_id")));
+                    consulta.setMedico(medicoDAO.findById(resultSet.getLong("id_medico")));
 
-                    consulta.setDataConsulta(resultSet.getDate("data_consulta").toLocalDate());
-                    consulta.setHorarioConsulta(resultSet.getTime("horario_consulta").toLocalTime());
-                    consulta.setStatus(resultSet.getString("status"));
-                    consulta.setStatus(resultSet.getString("tipo_consulta"));
-                    consulta.setStatus(resultSet.getString("observacoes"));
-                    consulta.setStatus(resultSet.getString("link_teleconsulta"));
+                    consulta.setDataConsulta(resultSet.getDate("dt_consulta").toLocalDate());
+                    consulta.setHorarioConsulta(resultSet.getTime("hr_consulta").toLocalTime());
+                    consulta.setStatus(resultSet.getString("st_consulta"));
+                    consulta.setStatus(resultSet.getString("tp_consulta"));
+                    consulta.setStatus(resultSet.getString("ds_observacoes"));
+                    consulta.setStatus(resultSet.getString("lk_teleconsulta"));
                     consultas.add(consulta);
                 }
             } else {

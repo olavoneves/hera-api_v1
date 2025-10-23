@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class MedicoDAO {
 
     public MedicoTO save(MedicoTO medico) {
-        String sql = "INSERT INTO T_HR_MEDICOS(nome, crm, especialidade, email, telefone, status) VALUES(?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO T_HR_MEDICOS(nm_medico, cd_crm, ds_especialidade, em_medico, id_telefone, st_medico) VALUES(?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, medico.getNome());
@@ -32,7 +32,7 @@ public class MedicoDAO {
     }
 
     public MedicoTO update(MedicoTO medico) {
-        String sql = "UPDATE T_HR_MEDICOS SET nome = ?, crm = ?, especialidade = ?, email = ?, telefone = ?, status = ? WHERE id = ?";
+        String sql = "UPDATE T_HR_MEDICOS SET nm_medico = ?, cd_crm = ?, ds_especialidade = ?, em_medico = ?, id_telefone = ?, st_medico = ? WHERE id_medico = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, medico.getNome());
@@ -56,7 +56,7 @@ public class MedicoDAO {
     }
 
     public boolean delete(Long id) {
-        String sql = "DELETE FROM T_HR_MEDICOS WHERE id = ?";
+        String sql = "DELETE FROM T_HR_MEDICOS WHERE id_medico = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -71,7 +71,7 @@ public class MedicoDAO {
     }
 
     public MedicoTO findById(Long id) {
-        String sql = "SELECT * FROM T_HR_MEDICOS WHERE id = ?";
+        String sql = "SELECT * FROM T_HR_MEDICOS WHERE id_medico = ?";
         MedicoTO medico = null;
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
@@ -80,16 +80,16 @@ public class MedicoDAO {
 
             if (resultSet.next()) {
                 medico = new MedicoTO();
-                medico.setId(resultSet.getLong("id"));
-                medico.setNome(resultSet.getString("nome"));
-                medico.setCrm(resultSet.getString("crm"));
-                medico.setEspecialidade(resultSet.getString("especialidade"));
-                medico.setEmail(resultSet.getString("email"));
+                medico.setId(resultSet.getLong("id_medico"));
+                medico.setNome(resultSet.getString("nm_medico"));
+                medico.setCrm(resultSet.getString("cd_crm"));
+                medico.setEspecialidade(resultSet.getString("ds_especialidade"));
+                medico.setEmail(resultSet.getString("em_medico"));
 
                 TelefoneDAO telefoneDAO = new TelefoneDAO();
-                medico.setTelefone(telefoneDAO.findById(resultSet.getLong("telefone_id")));
+                medico.setTelefone(telefoneDAO.findById(resultSet.getLong("id_telefone")));
 
-                medico.setStatus(resultSet.getString("status"));
+                medico.setStatus(resultSet.getString("st_medico"));
             } else {
                 return null;
             }
@@ -112,16 +112,16 @@ public class MedicoDAO {
             if (resultSet != null) {
                 while (resultSet.next()) {
                     MedicoTO medico = new MedicoTO();
-                    medico.setId(resultSet.getLong("id"));
-                    medico.setNome(resultSet.getString("nome"));
-                    medico.setCrm(resultSet.getString("crm"));
-                    medico.setEspecialidade(resultSet.getString("especialidade"));
-                    medico.setEmail(resultSet.getString("email"));
+                    medico.setId(resultSet.getLong("id_medico"));
+                    medico.setNome(resultSet.getString("nm_medico"));
+                    medico.setCrm(resultSet.getString("cd_crm"));
+                    medico.setEspecialidade(resultSet.getString("ds_especialidade"));
+                    medico.setEmail(resultSet.getString("em_medico"));
 
                     TelefoneDAO telefoneDAO = new TelefoneDAO();
-                    medico.setTelefone(telefoneDAO.findById(resultSet.getLong("telefone_id")));
+                    medico.setTelefone(telefoneDAO.findById(resultSet.getLong("id_telefone")));
 
-                    medico.setStatus(resultSet.getString("status"));
+                    medico.setStatus(resultSet.getString("st_medico"));
                     medicos.add(medico);
                 }
             } else {
