@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class AcompanhanteDAO {
 
     public AcompanhanteTO save(AcompanhanteTO acompanhante) {
-        String sql = "INSERT INTO T_HR_ACOMPANHANTES(nome, telefone_id, parentesco, email, data_cadastro) VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO T_HR_ACOMPANHANTES(nm_acompanhante, id_telefone, ds_parentesco, em_acompanhante, dt_cadastro) VALUES(?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, acompanhante.getNome());
@@ -32,7 +32,7 @@ public class AcompanhanteDAO {
     }
 
     public AcompanhanteTO update(AcompanhanteTO acompanhante) {
-        String sql = "UPDATE T_HR_ACOMPANHANTES SET nome = ?, telefone_id = ?, parentesco = ?, email = ?, data_cadastro = ? WHERE id = ?";
+        String sql = "UPDATE T_HR_ACOMPANHANTES SET nm_acompanhante = ?, id_telefone = ?, ds_parentesco = ?, em_acompanhante = ?, dt_cadastro = ? WHERE id_acompanhante = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, acompanhante.getNome());
@@ -55,7 +55,7 @@ public class AcompanhanteDAO {
     }
 
     public boolean delete(Long id) {
-        String sql = "DELETE FROM T_HR_ACOMPANHANTES WHERE id = ?";
+        String sql = "DELETE FROM T_HR_ACOMPANHANTES WHERE id_acompanhante = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -70,7 +70,7 @@ public class AcompanhanteDAO {
     }
 
     public AcompanhanteTO findById(Long id) {
-        String sql = "SELECT * FROM T_HR_ACOMPANHANTES WHERE id = ?";
+        String sql = "SELECT * FROM T_HR_ACOMPANHANTES WHERE id_acompanhante = ?";
         AcompanhanteTO acompanhante = null;
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
@@ -79,14 +79,15 @@ public class AcompanhanteDAO {
 
             if (resultSet.next()) {
                 acompanhante = new AcompanhanteTO();
-                acompanhante.setId(resultSet.getLong("id"));
+                acompanhante.setId(resultSet.getLong("id_acompanhante"));
+                acompanhante.setNome(resultSet.getString("nm_acompanhante"));
 
                 TelefoneDAO telefoneDAO = new TelefoneDAO();
-                acompanhante.setTelefone(telefoneDAO.findById(resultSet.getLong("telefone_id")));
+                acompanhante.setTelefone(telefoneDAO.findById(resultSet.getLong("id_telefone")));
 
-                acompanhante.setParentesco(resultSet.getString("parentesco"));
-                acompanhante.setEmail(resultSet.getString("email"));
-                acompanhante.setDataCadastro(resultSet.getTimestamp("data_cadastro").toLocalDateTime());
+                acompanhante.setParentesco(resultSet.getString("ds_parentesco"));
+                acompanhante.setEmail(resultSet.getString("em_acompanhante"));
+                acompanhante.setDataCadastro(resultSet.getTimestamp("dt_cadastro").toLocalDateTime());
             } else {
                 return null;
             }
@@ -109,14 +110,15 @@ public class AcompanhanteDAO {
             if (resultSet != null) {
                 while (resultSet.next()) {
                     AcompanhanteTO acompanhante = new AcompanhanteTO();
-                    acompanhante.setId(resultSet.getLong("id"));
+                    acompanhante.setId(resultSet.getLong("id_acompanhante"));
+                    acompanhante.setNome(resultSet.getString("nm_acompanhante"));
 
                     TelefoneDAO telefoneDAO = new TelefoneDAO();
-                    acompanhante.setTelefone(telefoneDAO.findById(resultSet.getLong("telefone_id")));
+                    acompanhante.setTelefone(telefoneDAO.findById(resultSet.getLong("id_telefone")));
 
-                    acompanhante.setParentesco(resultSet.getString("parentesco"));
-                    acompanhante.setEmail(resultSet.getString("email"));
-                    acompanhante.setDataCadastro(resultSet.getTimestamp("data_cadastro").toLocalDateTime());
+                    acompanhante.setParentesco(resultSet.getString("ds_parentesco"));
+                    acompanhante.setEmail(resultSet.getString("em_acompanhante"));
+                    acompanhante.setDataCadastro(resultSet.getTimestamp("dt_cadastro").toLocalDateTime());
                     acompanhantes.add(acompanhante);
                 }
             } else {

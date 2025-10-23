@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class EnderecoDAO {
 
     public EnderecoTO save(EnderecoTO endereco) {
-        String sql = "INSERT INTO T_HR_ENDERECOS(cep, logradouro, complemento, bairro, estado) VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO T_HR_ENDERECOS(cd_cep, ds_logradouro, ds_complemento, nm_bairro, sg_estado) VALUES(?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, endereco.getCep());
@@ -31,7 +31,7 @@ public class EnderecoDAO {
     }
 
     public EnderecoTO update(EnderecoTO endereco) {
-        String sql = "UPDATE T_HR_ENDERECOS SET cep = ?, logradouro = ?, complemento = ?, bairro = ?, estado = ? WHERE id = ?";
+        String sql = "UPDATE T_HR_ENDERECOS SET cd_cep = ?, ds_logradouro = ?, ds_complemento = ?, nm_bairro = ?, sg_estado = ? WHERE id_endereco = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, endereco.getCep());
@@ -54,7 +54,7 @@ public class EnderecoDAO {
     }
 
     public boolean delete(Long id) {
-        String sql = "DELETE FROM T_HR_ENDERECOS WHERE id = ?";
+        String sql = "DELETE FROM T_HR_ENDERECOS WHERE id_endereco = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -69,7 +69,7 @@ public class EnderecoDAO {
     }
 
     public EnderecoTO findById(Long id) {
-        String sql = "SELECT * FROM T_HR_ENDERECOS WHERE id = ?";
+        String sql = "SELECT * FROM T_HR_ENDERECOS WHERE id_endereco = ?";
         EnderecoTO endereco = null;
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
@@ -78,12 +78,12 @@ public class EnderecoDAO {
 
             if (resultSet.next()) {
                 endereco = new EnderecoTO();
-                endereco.setId(resultSet.getLong("id"));
-                endereco.setCep(resultSet.getString("cep"));
-                endereco.setCep(resultSet.getString("logradouro"));
-                endereco.setCep(resultSet.getString("complemento"));
-                endereco.setCep(resultSet.getString("bairro"));
-                endereco.setCep(resultSet.getString("estado"));
+                endereco.setId(resultSet.getLong("id_endereco"));
+                endereco.setCep(resultSet.getString("cd_cep"));
+                endereco.setCep(resultSet.getString("ds_logradouro"));
+                endereco.setCep(resultSet.getString("ds_complemento"));
+                endereco.setCep(resultSet.getString("nm_bairro"));
+                endereco.setCep(resultSet.getString("sg_estado"));
             } else {
                 return null;
             }
@@ -106,12 +106,12 @@ public class EnderecoDAO {
             if (resultSet != null) {
                 while (resultSet.next()) {
                     EnderecoTO endereco = new EnderecoTO();
-                    endereco.setId(resultSet.getLong("id"));
-                    endereco.setCep(resultSet.getString("cep"));
-                    endereco.setCep(resultSet.getString("logradouro"));
-                    endereco.setCep(resultSet.getString("complemento"));
-                    endereco.setCep(resultSet.getString("bairro"));
-                    endereco.setCep(resultSet.getString("estado"));
+                    endereco.setId(resultSet.getLong("id_endereco"));
+                    endereco.setCep(resultSet.getString("cd_cep"));
+                    endereco.setCep(resultSet.getString("ds_logradouro"));
+                    endereco.setCep(resultSet.getString("ds_complemento"));
+                    endereco.setCep(resultSet.getString("nm_bairro"));
+                    endereco.setCep(resultSet.getString("sg_estado"));
                     enderecos.add(endereco);
                 }
             } else {
