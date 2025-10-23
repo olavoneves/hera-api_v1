@@ -16,6 +16,7 @@ public class ConsultaResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(@Valid ConsultaTO consulta) {
+        consultaBO = new ConsultaBO();
         ConsultaTO resultado = consultaBO.save(consulta);
         Response.ResponseBuilder response = null;
 
@@ -32,6 +33,7 @@ public class ConsultaResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id, @Valid ConsultaTO consulta) {
+        consultaBO = new ConsultaBO();
         consulta.setId(id);
         ConsultaTO resultado = consultaBO.update(consulta);
         Response.ResponseBuilder response = null;
@@ -48,6 +50,7 @@ public class ConsultaResource {
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
+        consultaBO = new ConsultaBO();
         Response.ResponseBuilder response = null;
 
         if (consultaBO.delete(id)) {
@@ -62,6 +65,7 @@ public class ConsultaResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findById(@PathParam("id") Long id) {
+        consultaBO = new ConsultaBO();
         ConsultaTO resultado = consultaBO.findById(id);
         Response.ResponseBuilder response = null;
 
@@ -77,6 +81,7 @@ public class ConsultaResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
+        consultaBO = new ConsultaBO();
         ArrayList<ConsultaTO> resultado = consultaBO.findAll();
         Response.ResponseBuilder response = null;
 

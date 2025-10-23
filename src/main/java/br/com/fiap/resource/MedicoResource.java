@@ -16,6 +16,7 @@ public class MedicoResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(@Valid MedicoTO medico) {
+        medicoBO = new MedicoBO();
         MedicoTO resultado = medicoBO.save(medico);
         Response.ResponseBuilder response = null;
 
@@ -32,6 +33,7 @@ public class MedicoResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id, @Valid MedicoTO medico) {
+        medicoBO = new MedicoBO();
         medico.setId(id);
         MedicoTO resultado = medicoBO.update(medico);
         Response.ResponseBuilder response = null;
@@ -48,6 +50,7 @@ public class MedicoResource {
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
+        medicoBO = new MedicoBO();
         Response.ResponseBuilder response = null;
 
         if (medicoBO.delete(id)) {
@@ -62,6 +65,7 @@ public class MedicoResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findById(@PathParam("id") Long id) {
+        medicoBO = new MedicoBO();
         MedicoTO resultado = medicoBO.findById(id);
         Response.ResponseBuilder response = null;
 
@@ -77,6 +81,7 @@ public class MedicoResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
+        medicoBO = new MedicoBO();
         ArrayList<MedicoTO> resultado = medicoBO.findAll();
         Response.ResponseBuilder response = null;
 

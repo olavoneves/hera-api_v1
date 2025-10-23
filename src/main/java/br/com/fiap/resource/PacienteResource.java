@@ -16,6 +16,7 @@ public class PacienteResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(@Valid PacienteTO paciente) {
+        pacienteBO = new PacienteBO();
         PacienteTO resultado = pacienteBO.save(paciente);
         Response.ResponseBuilder response = null;
 
@@ -32,6 +33,7 @@ public class PacienteResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id,@Valid PacienteTO paciente) {
+        pacienteBO = new PacienteBO();
         paciente.setId(id);
         PacienteTO resultado = pacienteBO.update(paciente);
         Response.ResponseBuilder response = null;
@@ -48,6 +50,7 @@ public class PacienteResource {
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
+        pacienteBO = new PacienteBO();
         Response.ResponseBuilder response = null;
 
         if (pacienteBO.delete(id)) {
@@ -62,6 +65,7 @@ public class PacienteResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findById(@PathParam("id") Long id) {
+        pacienteBO = new PacienteBO();
         PacienteTO resultado = pacienteBO.findById(id);
         Response.ResponseBuilder response = null;
 
@@ -77,6 +81,7 @@ public class PacienteResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
+        pacienteBO = new PacienteBO();
         ArrayList<PacienteTO> resultado = pacienteBO.findAll();
         Response.ResponseBuilder response = null;
 

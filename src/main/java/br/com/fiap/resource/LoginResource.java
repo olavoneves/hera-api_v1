@@ -15,6 +15,7 @@ public class LoginResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(LoginTO login) {
+        loginBO = new LoginBO();
         String resultado = loginBO.login(login.getEmail(), login.getSenha());
         Response.ResponseBuilder response = null;
 

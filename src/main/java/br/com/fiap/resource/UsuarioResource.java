@@ -16,6 +16,7 @@ public class UsuarioResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response save(@Valid UsuarioTO usuario) {
+        usuarioBO = new UsuarioBO();
         UsuarioTO resultado = usuarioBO.save(usuario);
         Response.ResponseBuilder response = null;
 
@@ -32,6 +33,7 @@ public class UsuarioResource {
     @Path("/{id}")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response update(@PathParam("id") Long id, @Valid UsuarioTO usuario) {
+        usuarioBO = new UsuarioBO();
         usuario.setId(id);
         UsuarioTO resultado = usuarioBO.update(usuario);
         Response.ResponseBuilder response = null;
@@ -48,6 +50,7 @@ public class UsuarioResource {
     @DELETE
     @Path("/{id}")
     public Response delete(@PathParam("id") Long id) {
+        usuarioBO = new UsuarioBO();
         Response.ResponseBuilder response = null;
 
         if (usuarioBO.delete(id)) {
@@ -62,6 +65,7 @@ public class UsuarioResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response findById(@PathParam("id") Long id) {
+        usuarioBO = new UsuarioBO();
         UsuarioTO resultado = usuarioBO.findById(id);
         Response.ResponseBuilder response = null;
 
@@ -77,6 +81,7 @@ public class UsuarioResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response findAll() {
+        usuarioBO = new UsuarioBO();
         ArrayList<UsuarioTO> resultado = usuarioBO.findAll();
         Response.ResponseBuilder response = null;
 
