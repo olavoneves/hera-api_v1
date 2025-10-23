@@ -91,7 +91,7 @@ public class UsuarioDAO {
     }
 
     public ArrayList<UsuarioTO> findAll() {
-        String sql = "SELECT * FROM T_HR_USUARIOS ORDER BY ID";
+        String sql = "SELECT * FROM T_HR_USUARIOS ORDER BY id_usuario";
         ArrayList<UsuarioTO> usuarios = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {

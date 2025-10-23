@@ -139,7 +139,7 @@ public class PacienteDAO {
     }
 
     public ArrayList<PacienteTO> findAll() {
-        String sql = "SELECT * FROM T_HR_PACIENTES ORDER BY ID";
+        String sql = "SELECT * FROM T_HR_PACIENTES ORDER BY id_paciente";
         ArrayList<PacienteTO> pacientes = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {

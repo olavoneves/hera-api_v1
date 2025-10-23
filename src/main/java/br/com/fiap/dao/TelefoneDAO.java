@@ -92,7 +92,7 @@ public class TelefoneDAO
     }
 
     public ArrayList<TelefoneTO> findAll() {
-        String sql = "SELECT * FROM T_HR_TELEFONES ORDER BY ID";
+        String sql = "SELECT * FROM T_HR_TELEFONES ORDER BY id_telefone";
         ArrayList<TelefoneTO> telefones = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {

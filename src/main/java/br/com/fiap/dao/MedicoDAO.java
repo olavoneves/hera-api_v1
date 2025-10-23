@@ -103,7 +103,7 @@ public class MedicoDAO {
     }
 
     public ArrayList<MedicoTO> findAll() {
-        String sql = "SELECT * FROM T_HR_MEDICOS ORDER BY ID";
+        String sql = "SELECT * FROM T_HR_MEDICOS ORDER BY id_medico";
         ArrayList<MedicoTO> medicos = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {

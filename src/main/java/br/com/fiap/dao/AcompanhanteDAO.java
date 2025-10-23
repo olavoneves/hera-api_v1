@@ -101,7 +101,7 @@ public class AcompanhanteDAO {
     }
 
     public ArrayList<AcompanhanteTO> findAll() {
-        String sql = "SELECT * FROM T_HR_ACOMPANHANTES ORDER BY ID";
+        String sql = "SELECT * FROM T_HR_ACOMPANHANTES ORDER BY id_acompanhante";
         ArrayList<AcompanhanteTO> acompanhantes = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {

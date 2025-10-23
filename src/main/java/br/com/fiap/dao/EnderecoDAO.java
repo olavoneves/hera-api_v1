@@ -97,7 +97,7 @@ public class EnderecoDAO {
     }
 
     public ArrayList<EnderecoTO> findAll() {
-        String sql = "SELECT * FROM T_HR_ENDERECOS ORDER BY ID";
+        String sql = "SELECT * FROM T_HR_ENDERECOS ORDER BY id_endereco";
         ArrayList<EnderecoTO> enderecos = new ArrayList<>();
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
