@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class UsuarioDAO {
 
     public UsuarioTO save(UsuarioTO usuario) {
-        String sql = "INSERT INTO T_HR_USUARIOS(nome, email, senha) VALUES(?, ?, ?)";
+        String sql = "INSERT INTO T_HR_USUARIOS(nm_usuario, em_usuario, pw_usuario) VALUES(?, ?, ?)";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, usuario.getNome());
@@ -29,7 +29,7 @@ public class UsuarioDAO {
     }
 
     public UsuarioTO update(UsuarioTO usuario) {
-        String sql = "UPDATE T_HR_USUARIOS SET nome = ?, email = ?, senha = ? WHERE id = ?";
+        String sql = "UPDATE T_HR_USUARIOS SET nm_usuario = ?, em_usuario = ?, pw_usuario = ? WHERE id_usuario = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, usuario.getNome());
@@ -50,7 +50,7 @@ public class UsuarioDAO {
     }
 
     public boolean delete(Long id) {
-        String sql = "DELETE FROM T_HR_USUARIOS WHERE id = ?";
+        String sql = "DELETE FROM T_HR_USUARIOS WHERE id_usuario = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setLong(1, id);
@@ -65,7 +65,7 @@ public class UsuarioDAO {
     }
 
     public UsuarioTO findById(Long id) {
-        String sql = "SELECT * FROM T_HR_USUARIOS WHERE id = ?";
+        String sql = "SELECT * FROM T_HR_USUARIOS WHERE id_usuario = ?";
         UsuarioTO usuario = null;
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
@@ -74,10 +74,10 @@ public class UsuarioDAO {
 
             if (resultSet.next()) {
                 usuario = new UsuarioTO();
-                usuario.setId(resultSet.getLong("id"));
-                usuario.setNome(resultSet.getString("nome"));
-                usuario.setEmail(resultSet.getString("email"));
-                usuario.setSenha(resultSet.getString("senha"));
+                usuario.setId(resultSet.getLong("id_usuario"));
+                usuario.setNome(resultSet.getString("nm_usuario"));
+                usuario.setEmail(resultSet.getString("em_usuario"));
+                usuario.setSenha(resultSet.getString("pw_usuario"));
             } else {
                 return null;
             }
@@ -100,10 +100,10 @@ public class UsuarioDAO {
             if (resultSet != null) {
                 while (resultSet.next()) {
                     UsuarioTO usuario = new UsuarioTO();
-                    usuario.setId(resultSet.getLong("id"));
-                    usuario.setNome(resultSet.getString("nome"));
-                    usuario.setEmail(resultSet.getString("email"));
-                    usuario.setSenha(resultSet.getString("senha"));
+                    usuario.setId(resultSet.getLong("id_usuario"));
+                    usuario.setNome(resultSet.getString("nm_usuario"));
+                    usuario.setEmail(resultSet.getString("em_usuario"));
+                    usuario.setSenha(resultSet.getString("pw_usuario"));
                     usuarios.add(usuario);
                 }
             } else {
@@ -119,7 +119,7 @@ public class UsuarioDAO {
     }
 
     public String login(String email, String senha) {
-        String sql = "SELECT usuario FROM T_HR_USUARIOS usuario WHERE email = ? AND senha = ?";
+        String sql = "SELECT usuario FROM T_HR_USUARIOS usuario WHERE em_usuario = ? AND pw_usuario = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, email);
