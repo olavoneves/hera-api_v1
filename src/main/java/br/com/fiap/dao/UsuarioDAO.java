@@ -119,7 +119,7 @@ public class UsuarioDAO {
     }
 
     public UsuarioTO login(String email, String senha) {
-        String sql = "SELECT usuario FROM T_HR_USUARIOS usuario WHERE em_usuario = ? AND pw_usuario = ?";
+        String sql = "SELECT usuario.id_usuario , usuario.em_usuario, usuario.pw_usuario FROM T_HR_USUARIOS usuario WHERE em_usuario = ? AND pw_usuario = ?";
         UsuarioTO usuario = null;
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
@@ -129,6 +129,7 @@ public class UsuarioDAO {
 
             if (resultSet != null) {
                 usuario = new UsuarioTO();
+                usuario.setId(resultSet.getLong("id_usuario"));
                 usuario.setEmail(resultSet.getString("em_usuario"));
                 usuario.setSenha(resultSet.getString("pw_usuario"));
             } else {
