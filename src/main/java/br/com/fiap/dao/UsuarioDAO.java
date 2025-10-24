@@ -128,7 +128,7 @@ public class UsuarioDAO {
             preparedStatement.setString(2, senha);
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (resultSet != null) {
+            if (resultSet.next()) {
                 login = new LoginTO();
                 login.setEmail(resultSet.getString("em_usuario"));
                 login.setSenha(resultSet.getString("pw_usuario"));
