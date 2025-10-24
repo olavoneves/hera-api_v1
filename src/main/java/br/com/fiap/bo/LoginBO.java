@@ -1,12 +1,12 @@
 package br.com.fiap.bo;
 
 import br.com.fiap.dao.UsuarioDAO;
-import br.com.fiap.to.UsuarioTO;
+import br.com.fiap.to.LoginTO;
 
 public class LoginBO {
     private UsuarioDAO usuarioDAO;
 
-    public UsuarioTO login(String email, String senha) {
+    public LoginTO login(String email, String senha) {
         usuarioDAO = new UsuarioDAO();
 
         if (email.isEmpty() || senha.isEmpty()) {

@@ -1,5 +1,6 @@
 package br.com.fiap.dao;
 
+import br.com.fiap.to.LoginTO;
 import br.com.fiap.to.UsuarioTO;
 
 import java.sql.PreparedStatement;
@@ -118,9 +119,9 @@ public class UsuarioDAO {
         return usuarios;
     }
 
-    public UsuarioTO login(String email, String senha) {
-        String sql = "SELECT usuario.id_usuario , usuario.em_usuario, usuario.pw_usuario FROM T_HR_USUARIOS usuario WHERE em_usuario = ? AND pw_usuario = ?";
-        UsuarioTO usuario = null;
+    public LoginTO login(String email, String senha) {
+        String sql = "SELECT usuario.em_usuario, usuario.pw_usuario FROM T_HR_USUARIOS usuario WHERE em_usuario = ? AND pw_usuario = ?";
+        LoginTO login = null;
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
             preparedStatement.setString(1, email);
@@ -128,10 +129,9 @@ public class UsuarioDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             if (resultSet != null) {
-                usuario = new UsuarioTO();
-                usuario.setId(resultSet.getLong("id_usuario"));
-                usuario.setEmail(resultSet.getString("em_usuario"));
-                usuario.setSenha(resultSet.getString("pw_usuario"));
+                login = new LoginTO();
+                login.setEmail(resultSet.getString("em_usuario"));
+                login.setSenha(resultSet.getString("pw_usuario"));
             } else {
                 return null;
             }
@@ -141,6 +141,6 @@ public class UsuarioDAO {
         } finally {
             ConnectionFactory.closeConnection();
         }
-        return usuario;
+        return login;
     }
 }

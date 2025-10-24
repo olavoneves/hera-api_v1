@@ -18,7 +18,7 @@ public class LoginResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response login(@Valid LoginTO login) {
         loginBO = new LoginBO();
-        UsuarioTO resultado = loginBO.login(login.getEmail(), login.getSenha());
+        LoginTO resultado = loginBO.login(login.getEmail(), login.getSenha());
         Response.ResponseBuilder response = null;
 
         if (resultado != null) {
