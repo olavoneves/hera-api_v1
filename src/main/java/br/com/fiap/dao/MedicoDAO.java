@@ -1,6 +1,7 @@
 package br.com.fiap.dao;
 
 import br.com.fiap.to.MedicoTO;
+import br.com.fiap.to.TelefoneTO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,11 +13,16 @@ public class MedicoDAO {
         String sql = "INSERT INTO T_HR_MEDICOS(nm_medico, cd_crm, ds_especialidade, em_medico, id_telefone, st_medico) VALUES(?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
+
+            TelefoneTO telefoneMedico = medico.getTelefone();
+            TelefoneDAO telefoneDAO = new TelefoneDAO();
+            telefoneMedico = telefoneDAO.save(telefoneMedico);
+
             preparedStatement.setString(1, medico.getNome());
             preparedStatement.setString(2, medico.getCrm());
             preparedStatement.setString(3, medico.getEspecialidade());
             preparedStatement.setString(4, medico.getEmail());
-            preparedStatement.setLong(5, medico.getTelefone().getId());
+            preparedStatement.setLong(5, telefoneMedico.getId());
             preparedStatement.setString(6, medico.getStatus());
             if (preparedStatement.executeUpdate() > 0) {
                 return medico;
@@ -35,11 +41,18 @@ public class MedicoDAO {
         String sql = "UPDATE T_HR_MEDICOS SET nm_medico = ?, cd_crm = ?, ds_especialidade = ?, em_medico = ?, id_telefone = ?, st_medico = ? WHERE id_medico = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
+
+            TelefoneTO telefoneMedico = medico.getTelefone();
+            if (telefoneMedico != null) {
+                TelefoneDAO telefoneDAO = new TelefoneDAO();
+                telefoneMedico = telefoneDAO.update(telefoneMedico);
+            }
+
             preparedStatement.setString(1, medico.getNome());
             preparedStatement.setString(2, medico.getCrm());
             preparedStatement.setString(3, medico.getEspecialidade());
             preparedStatement.setString(4, medico.getEmail());
-            preparedStatement.setLong(5, medico.getTelefone().getId());
+            preparedStatement.setLong(5, telefoneMedico.getId());
             preparedStatement.setString(6, medico.getStatus());
             preparedStatement.setLong(7, medico.getId());
             if (preparedStatement.executeUpdate() > 0) {
@@ -58,10 +71,16 @@ public class MedicoDAO {
     public boolean delete(Long id) {
         String sql = "DELETE FROM T_HR_MEDICOS WHERE id_medico = ?";
 
-        try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
-            preparedStatement.setLong(1, id);
-            return preparedStatement.executeUpdate() > 0;
+        try {
+            MedicoTO medico = findById(id);
+            if (medico != null && medico.getTelefone() != null) {
+                new TelefoneDAO().delete(medico.getTelefone().getId());
+            }
 
+            try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
+                preparedStatement.setLong(1, id);
+                return preparedStatement.executeUpdate() > 0;
+            }
         } catch (Exception e) {
             System.out.println("Erro ao excluir medico: " + e.getMessage());
         } finally {

@@ -1,6 +1,9 @@
 package br.com.fiap.dao;
 
+import br.com.fiap.to.AcompanhanteTO;
+import br.com.fiap.to.EnderecoTO;
 import br.com.fiap.to.PacienteTO;
+import br.com.fiap.to.TelefoneTO;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,22 +15,39 @@ public class PacienteDAO {
         String sql = "INSERT INTO T_HR_PACIENTES(nm_paciente, em_paciente, sg_sexo, id_telefone, st_paciente, qt_consultas_restantes, qt_faltas, fl_possui_deficiencia, ds_tipo_deficiencia, fl_video_enviado, dt_nascimento, id_endereco, ds_preferencia_contato, dt_cadastro, dt_ultima_atualizacao, id_acompanhante) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
+
+            TelefoneTO telefonePaciente = paciente.getTelefone();
+            TelefoneDAO telefoneDAO = new TelefoneDAO();
+            telefonePaciente = telefoneDAO.save(telefonePaciente);
+
+            EnderecoTO endereco = paciente.getEndereco();
+            EnderecoDAO enderecoDAO = new EnderecoDAO();
+            endereco = enderecoDAO.save(endereco);
+
+            TelefoneTO telefoneAcomp = paciente.getAcompanhante().getTelefone();
+            telefoneAcomp = telefoneDAO.save(telefoneAcomp);
+
+            AcompanhanteTO acompanhante = paciente.getAcompanhante();
+            acompanhante.setTelefone(telefoneAcomp);
+            AcompanhanteDAO acompanhanteDAO = new AcompanhanteDAO();
+            acompanhante = acompanhanteDAO.save(acompanhante);
+
             preparedStatement.setString(1, paciente.getNome());
             preparedStatement.setString(2, paciente.getEmail());
             preparedStatement.setString(3, paciente.getSexo());
-            preparedStatement.setLong(4, paciente.getTelefone().getId());
+            preparedStatement.setLong(4, telefonePaciente.getId());
             preparedStatement.setString(5, paciente.getStatus());
             preparedStatement.setInt(6, paciente.getConsultasRestantes());
             preparedStatement.setInt(7, paciente.getFaltas());
-            preparedStatement.setString(8, paciente.isPossuiDeficiencia() ? "1" : "0");
+            preparedStatement.setInt(8, paciente.isPossuiDeficiencia() ? 1 : 0);
             preparedStatement.setString(9, paciente.getTipoDeficiencia());
-            preparedStatement.setString(10, paciente.isVideoEnviado() ? "1" : "0");
+            preparedStatement.setInt(10, paciente.isVideoEnviado() ? 1 : 0);
             preparedStatement.setDate(11,  java.sql.Date.valueOf(paciente.getDataNascimento()));
-            preparedStatement.setLong(12, paciente.getEndereco().getId());
+            preparedStatement.setLong(12, endereco.getId());
             preparedStatement.setString(13, paciente.getPreferenciaContato());
             preparedStatement.setTimestamp(14, java.sql.Timestamp.valueOf(paciente.getDataCadastro()));
             preparedStatement.setTimestamp(15, java.sql.Timestamp.valueOf(paciente.getUltimaAtualizacao()));
-            preparedStatement.setLong(16, paciente.getAcompanhante().getId());
+            preparedStatement.setLong(16, acompanhante.getId());
             if (preparedStatement.executeUpdate() > 0) {
                 return paciente;
             } else {
@@ -46,22 +66,42 @@ public class PacienteDAO {
         String sql = "UPDATE T_HR_PACIENTES SET nm_paciente = ?, em_paciente = ?, sg_sexo = ?, id_telefone = ?, st_paciente = ?, qt_consultas_restantes = ?, qt_faltas = ?, fl_possui_deficiencia = ?, ds_tipo_deficiencia = ?, fl_video_enviado = ?, dt_nascimento = ?, id_endereco = ?, ds_preferencia_contato = ?, dt_cadastro = ?, dt_ultima_atualizacao = ?, id_acompanhante = ? WHERE id_paciente = ?";
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
+
+            TelefoneTO telefonePaciente = paciente.getTelefone();
+            TelefoneDAO telefoneDAO = new TelefoneDAO();
+            telefonePaciente = telefoneDAO.update(telefonePaciente);
+
+            EnderecoTO endereco = paciente.getEndereco();
+            EnderecoDAO enderecoDAO = new EnderecoDAO();
+            endereco = enderecoDAO.update(endereco);
+
+            AcompanhanteTO acompanhante = paciente.getAcompanhante();
+            if (acompanhante != null) {
+                TelefoneTO telefoneAcomp = acompanhante.getTelefone();
+                if (telefoneAcomp != null) {
+                    telefoneAcomp = telefoneDAO.update(telefoneAcomp);
+                    acompanhante.setTelefone(telefoneAcomp);
+                }
+                AcompanhanteDAO acompanhanteDAO = new AcompanhanteDAO();
+                acompanhante = acompanhanteDAO.update(acompanhante);
+            }
+
             preparedStatement.setString(1, paciente.getNome());
             preparedStatement.setString(2, paciente.getEmail());
             preparedStatement.setString(3, paciente.getSexo());
-            preparedStatement.setLong(4, paciente.getTelefone().getId());
+            preparedStatement.setLong(4, telefonePaciente.getId());
             preparedStatement.setString(5, paciente.getStatus());
             preparedStatement.setInt(6, paciente.getConsultasRestantes());
             preparedStatement.setInt(7, paciente.getFaltas());
-            preparedStatement.setString(8, paciente.isPossuiDeficiencia() ? "1" : "0");
+            preparedStatement.setInt(8, paciente.isPossuiDeficiencia() ? 1 : 0);
             preparedStatement.setString(9, paciente.getTipoDeficiencia());
-            preparedStatement.setString(10, paciente.isVideoEnviado() ? "1" : "0");
+            preparedStatement.setInt(10, paciente.isVideoEnviado() ? 1 : 0);
             preparedStatement.setDate(11, java.sql.Date.valueOf(paciente.getDataNascimento()));
-            preparedStatement.setLong(12, paciente.getEndereco().getId());
+            preparedStatement.setLong(12, endereco.getId());
             preparedStatement.setString(13, paciente.getPreferenciaContato());
             preparedStatement.setTimestamp(14, java.sql.Timestamp.valueOf(paciente.getDataCadastro()));
             preparedStatement.setTimestamp(15, java.sql.Timestamp.valueOf(paciente.getUltimaAtualizacao()));
-            preparedStatement.setLong(16, paciente.getAcompanhante().getId());
+            preparedStatement.setLong(16, acompanhante.getId());
             preparedStatement.setLong(17, paciente.getId());
             if (preparedStatement.executeUpdate() > 0) {
                 return paciente;
@@ -79,10 +119,33 @@ public class PacienteDAO {
 
     public boolean delete(Long id) {
         String sql = "DELETE FROM T_HR_PACIENTES WHERE id_paciente = ?";
-        try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
-            preparedStatement.setLong(1, id);
-            return preparedStatement.executeUpdate() > 0;
+        try {
+            PacienteDAO pacienteDAO = new PacienteDAO();
+            PacienteTO paciente = pacienteDAO.findById(id);
 
+            if (paciente != null) {
+                // Excluir acompanhante (e telefone dele)
+                if (paciente.getAcompanhante() != null) {
+                    AcompanhanteTO acompanhante = paciente.getAcompanhante();
+                    if (acompanhante.getTelefone() != null) {
+                        new TelefoneDAO().delete(acompanhante.getTelefone().getId());
+                    }
+                    new AcompanhanteDAO().delete(acompanhante.getId());
+                }
+
+                // Excluir telefone e endereço do paciente
+                if (paciente.getTelefone() != null) {
+                    new TelefoneDAO().delete(paciente.getTelefone().getId());
+                }
+                if (paciente.getEndereco() != null) {
+                    new EnderecoDAO().delete(paciente.getEndereco().getId());
+                }
+
+                try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
+                    preparedStatement.setLong(1, id);
+                    return preparedStatement.executeUpdate() > 0;
+                }
+            }
         } catch (Exception e) {
             System.out.println("Erro ao excluir paciente: " + e.getMessage());
         } finally {
