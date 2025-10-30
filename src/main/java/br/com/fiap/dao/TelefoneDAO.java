@@ -16,11 +16,16 @@ public class TelefoneDAO
             preparedStatement.setString(1, telefone.getDdd());
             preparedStatement.setString(2, telefone.getNumero());
             preparedStatement.setString(3, telefone.getTipoDeTelefone());
+
             if (preparedStatement.executeUpdate() > 0) {
-                return telefone;
-            } else {
-                return null;
+                try (ResultSet rs = preparedStatement.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        telefone.setId(rs.getLong(1));
+                    }
+                }
             }
+            return telefone;
+
         } catch (Exception e) {
             System.out.println("Erro ao criar telefone: " + e.getMessage());
         }
