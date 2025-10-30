@@ -23,8 +23,6 @@ public class TelefoneDAO
             }
         } catch (Exception e) {
             System.out.println("Erro ao criar telefone: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return null;
     }
