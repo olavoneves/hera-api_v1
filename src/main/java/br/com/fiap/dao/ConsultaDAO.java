@@ -1,6 +1,8 @@
 package br.com.fiap.dao;
 
 import br.com.fiap.to.ConsultaTO;
+import br.com.fiap.to.MedicoTO;
+import br.com.fiap.to.PacienteTO;
 
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -13,7 +15,7 @@ public class ConsultaDAO {
     public ConsultaTO save(ConsultaTO consulta) {
         String sql = "INSERT INTO T_HR_CONSULTAS(id_paciente, id_medico, dt_consulta, hr_consulta, st_consulta, tp_consulta, ds_observacoes, lk_teleconsulta) VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql, new String[]{"id_consulta"})) {
             preparedStatement.setLong(1, consulta.getPaciente().getId());
             preparedStatement.setLong(2, consulta.getMedico().getId());
             preparedStatement.setDate(3, Date.valueOf(consulta.getDataConsulta()));
@@ -22,11 +24,25 @@ public class ConsultaDAO {
             preparedStatement.setString(6, consulta.getTipoConsulta());
             preparedStatement.setString(7, consulta.getObservacoes());
             preparedStatement.setString(8, consulta.getLinkTeleconsulta());
+
             if (preparedStatement.executeUpdate() > 0) {
+                ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
+                if (generatedKeys.next()) {
+                    consulta.setId(generatedKeys.getLong(1));
+                }
+
+                PacienteDAO pacienteDAO = new PacienteDAO();
+                PacienteTO pacienteCompleto = pacienteDAO.findById(consulta.getPaciente().getId());
+
+                MedicoDAO medicoDAO = new MedicoDAO();
+                MedicoTO medicoCompleto = medicoDAO.findById(consulta.getMedico().getId());
+
+                consulta.setPaciente(pacienteCompleto);
+                consulta.setMedico(medicoCompleto);
+
                 return consulta;
-            } else {
-                return null;
             }
+
         } catch (Exception e) {
             System.out.println("Erro ao criar consulta: " + e.getMessage());
         } finally {
