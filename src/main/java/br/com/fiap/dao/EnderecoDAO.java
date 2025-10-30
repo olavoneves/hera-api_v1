@@ -11,21 +11,24 @@ public class EnderecoDAO {
     public EnderecoTO save(EnderecoTO endereco) {
         String sql = "INSERT INTO T_HR_ENDERECOS(cd_cep, ds_logradouro, ds_complemento, nm_bairro, sg_estado) VALUES(?, ?, ?, ?, ?)";
 
-        try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql,  new String[] {"id_endereco"})) {
             preparedStatement.setString(1, endereco.getCep());
             preparedStatement.setString(2, endereco.getLogradouro());
             preparedStatement.setString(3, endereco.getComplemento());
             preparedStatement.setString(4, endereco.getBairro());
             preparedStatement.setString(5, endereco.getEstado());
+
             if (preparedStatement.executeUpdate() > 0) {
-                return endereco;
-            } else {
-                return null;
+                try (ResultSet rs = preparedStatement.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        endereco.setId(rs.getLong(1));
+                    }
+                }
             }
+            return endereco;
+
         } catch (Exception e) {
             System.out.println("Erro ao criar endereco: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return null;
     }
@@ -47,8 +50,6 @@ public class EnderecoDAO {
             }
         } catch (Exception e) {
             System.out.println("Erro ao atualizar endereco: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return null;
     }
@@ -62,8 +63,6 @@ public class EnderecoDAO {
 
         } catch (Exception e) {
             System.out.println("Erro ao excluir endereco: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return false;
     }
@@ -90,8 +89,6 @@ public class EnderecoDAO {
 
         } catch (Exception e) {
             System.out.println("Erro ao buscar endereco: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return endereco;
     }
@@ -120,8 +117,6 @@ public class EnderecoDAO {
 
         } catch (Exception e) {
             System.out.println("Erro ao buscar enderecos: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return enderecos;
     }

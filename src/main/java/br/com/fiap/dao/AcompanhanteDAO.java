@@ -12,21 +12,24 @@ public class AcompanhanteDAO {
     public AcompanhanteTO save(AcompanhanteTO acompanhante) {
         String sql = "INSERT INTO T_HR_ACOMPANHANTES(nm_acompanhante, id_telefone, ds_parentesco, em_acompanhante, dt_cadastro) VALUES(?, ?, ?, ?, ?)";
 
-        try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql,  new String[] {"id_acompanhante"})) {
             preparedStatement.setString(1, acompanhante.getNome());
             preparedStatement.setLong(2, acompanhante.getTelefone().getId());
             preparedStatement.setString(3, acompanhante.getParentesco());
             preparedStatement.setString(4, acompanhante.getEmail());
             preparedStatement.setTimestamp(5, Timestamp.valueOf(acompanhante.getDataCadastro()));
+
             if (preparedStatement.executeUpdate() > 0) {
-                return acompanhante;
-            } else {
-                return null;
+                try (ResultSet rs = preparedStatement.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        acompanhante.setId(rs.getLong(1));
+                    }
+                }
             }
+            return acompanhante;
+
         } catch (Exception e) {
             System.out.println("Erro ao criar acompanhante: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return null;
     }
@@ -48,8 +51,6 @@ public class AcompanhanteDAO {
             }
         } catch (Exception e) {
             System.out.println("Erro ao atualizar acompanhante: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return null;
     }
@@ -63,8 +64,6 @@ public class AcompanhanteDAO {
 
         } catch (Exception e) {
             System.out.println("Erro ao excluir acompanhante: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return false;
     }
@@ -94,8 +93,6 @@ public class AcompanhanteDAO {
 
         } catch (Exception e) {
             System.out.println("Erro ao buscar acompanhante: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return acompanhante;
     }
@@ -127,8 +124,6 @@ public class AcompanhanteDAO {
 
         } catch (Exception e) {
             System.out.println("Erro ao buscar acompanhantes: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return acompanhantes;
     }

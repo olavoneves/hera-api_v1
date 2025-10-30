@@ -47,8 +47,6 @@ public class TelefoneDAO
             }
         } catch (Exception e) {
             System.out.println("Erro ao atualizar telefone: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return null;
     }
@@ -62,8 +60,6 @@ public class TelefoneDAO
 
         } catch (Exception e) {
             System.out.println("Erro ao excluir telefone: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return false;
     }
@@ -88,8 +84,6 @@ public class TelefoneDAO
 
         } catch (Exception e) {
             System.out.println("Erro ao buscar telefone: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return telefone;
     }
@@ -116,8 +110,6 @@ public class TelefoneDAO
 
         } catch (Exception e) {
             System.out.println("Erro ao buscar telefones: " + e.getMessage());
-        } finally {
-            ConnectionFactory.closeConnection();
         }
         return telefones;
     }

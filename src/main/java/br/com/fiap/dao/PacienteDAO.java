@@ -99,9 +99,13 @@ public class PacienteDAO {
             preparedStatement.setDate(11, java.sql.Date.valueOf(paciente.getDataNascimento()));
             preparedStatement.setLong(12, endereco.getId());
             preparedStatement.setString(13, paciente.getPreferenciaContato());
-            preparedStatement.setTimestamp(14, java.sql.Timestamp.valueOf(paciente.getDataCadastro()));
-            preparedStatement.setTimestamp(15, java.sql.Timestamp.valueOf(paciente.getUltimaAtualizacao()));
-            preparedStatement.setLong(16, acompanhante.getId());
+            preparedStatement.setTimestamp(14, paciente.getDataCadastro() != null ? java.sql.Timestamp.valueOf(paciente.getDataCadastro()) : null);
+            preparedStatement.setTimestamp(15, paciente.getUltimaAtualizacao() != null ? java.sql.Timestamp.valueOf(paciente.getUltimaAtualizacao()) : null);
+            if (acompanhante != null) {
+                preparedStatement.setLong(16, acompanhante.getId());
+            } else {
+                preparedStatement.setNull(16, java.sql.Types.NUMERIC);
+            }
             preparedStatement.setLong(17, paciente.getId());
             if (preparedStatement.executeUpdate() > 0) {
                 return paciente;
@@ -124,7 +128,6 @@ public class PacienteDAO {
             PacienteTO paciente = pacienteDAO.findById(id);
 
             if (paciente != null) {
-                // Excluir acompanhante (e telefone dele)
                 if (paciente.getAcompanhante() != null) {
                     AcompanhanteTO acompanhante = paciente.getAcompanhante();
                     if (acompanhante.getTelefone() != null) {
@@ -133,7 +136,6 @@ public class PacienteDAO {
                     new AcompanhanteDAO().delete(acompanhante.getId());
                 }
 
-                // Excluir telefone e endereço do paciente
                 if (paciente.getTelefone() != null) {
                     new TelefoneDAO().delete(paciente.getTelefone().getId());
                 }
