@@ -12,7 +12,7 @@ public class TelefoneDAO
     public TelefoneTO save(TelefoneTO telefone) {
         String sql = "INSERT INTO T_HR_TELEFONES(nr_ddd, nr_telefone, tp_telefone) VALUES(?, ?, ?)";
 
-        try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql, new String[] {"id_telefone"})) {
             preparedStatement.setString(1, telefone.getDdd());
             preparedStatement.setString(2, telefone.getNumero());
             preparedStatement.setString(3, telefone.getTipoDeTelefone());
