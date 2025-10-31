@@ -4,10 +4,7 @@ import br.com.fiap.to.ConsultaTO;
 import br.com.fiap.to.MedicoTO;
 import br.com.fiap.to.PacienteTO;
 
-import java.sql.Date;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Time;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class ConsultaDAO {
@@ -132,37 +129,47 @@ public class ConsultaDAO {
         String sql = "SELECT * FROM T_HR_CONSULTAS ORDER BY id_consulta";
         ArrayList<ConsultaTO> consultas = new ArrayList<>();
 
-        try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
-            ResultSet resultSet = preparedStatement.executeQuery();
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
 
-            if (resultSet != null) {
-                while (resultSet.next()) {
-                    ConsultaTO consulta = new ConsultaTO();
-                    consulta.setId(resultSet.getLong("id_consulta"));
+        try {
+            conn = ConnectionFactory.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
 
-                    PacienteDAO pacienteDAO = new PacienteDAO();
-                    consulta.setPaciente(pacienteDAO.findById(resultSet.getLong("id_paciente")));
+            while (rs.next()) {
+                ConsultaTO consulta = new ConsultaTO();
+                consulta.setId(rs.getLong("id_consulta"));
 
-                    MedicoDAO medicoDAO = new MedicoDAO();
-                    consulta.setMedico(medicoDAO.findById(resultSet.getLong("id_medico")));
+                PacienteDAO pacienteDAO = new PacienteDAO();
+                consulta.setPaciente(pacienteDAO.findById(rs.getLong("id_paciente")));
 
-                    consulta.setDataConsulta(resultSet.getDate("dt_consulta").toLocalDate());
-                    consulta.setHorarioConsulta(resultSet.getTime("hr_consulta").toLocalTime());
-                    consulta.setStatus(resultSet.getString("st_consulta"));
-                    consulta.setStatus(resultSet.getString("tp_consulta"));
-                    consulta.setStatus(resultSet.getString("ds_observacoes"));
-                    consulta.setStatus(resultSet.getString("lk_teleconsulta"));
-                    consultas.add(consulta);
-                }
-            } else {
-                return null;
+                MedicoDAO medicoDAO = new MedicoDAO();
+                consulta.setMedico(medicoDAO.findById(rs.getLong("id_medico")));
+
+                consulta.setDataConsulta(rs.getDate("dt_consulta").toLocalDate());
+                consulta.setHorarioConsulta(rs.getTime("hr_consulta").toLocalTime());
+                consulta.setStatus(rs.getString("st_consulta"));
+                consulta.setTipoConsulta(rs.getString("tp_consulta"));
+                consulta.setObservacoes(rs.getString("ds_observacoes"));
+                consulta.setLinkTeleconsulta(rs.getString("lk_teleconsulta"));
+
+                consultas.add(consulta);
             }
 
         } catch (Exception e) {
             System.out.println("Erro ao buscar consultas: " + e.getMessage());
         } finally {
-            ConnectionFactory.closeConnection();
+            try {
+                if (rs != null) rs.close();
+                if (ps != null) ps.close();
+                if (conn != null) conn.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
+
         return consultas;
     }
 }
