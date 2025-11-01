@@ -5,6 +5,7 @@ import br.com.fiap.to.EnderecoTO;
 import br.com.fiap.to.PacienteTO;
 import br.com.fiap.to.TelefoneTO;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -122,32 +123,44 @@ public class PacienteDAO {
     }
 
     public boolean delete(Long id) {
-        String sql = "DELETE FROM T_HR_PACIENTES WHERE id_paciente = ?";
-        try {
-            PacienteDAO pacienteDAO = new PacienteDAO();
-            PacienteTO paciente = pacienteDAO.findById(id);
+        try (Connection conn = ConnectionFactory.getConnection()) {
 
-            if (paciente != null) {
-                if (paciente.getAcompanhante() != null) {
-                    AcompanhanteTO acompanhante = paciente.getAcompanhante();
-                    if (acompanhante.getTelefone() != null) {
-                        new TelefoneDAO().delete(acompanhante.getTelefone().getId());
-                    }
-                    new AcompanhanteDAO().delete(acompanhante.getId());
-                }
-
-                if (paciente.getTelefone() != null) {
-                    new TelefoneDAO().delete(paciente.getTelefone().getId());
-                }
-                if (paciente.getEndereco() != null) {
-                    new EnderecoDAO().delete(paciente.getEndereco().getId());
-                }
-
-                try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
-                    preparedStatement.setLong(1, id);
-                    return preparedStatement.executeUpdate() > 0;
-                }
+            try (PreparedStatement ps1 = conn.prepareStatement(
+                    "DELETE FROM T_HR_CONSULTAS WHERE id_paciente = ?")) {
+                ps1.setLong(1, id);
+                ps1.executeUpdate();
             }
+
+            try (PreparedStatement ps2 = conn.prepareStatement(
+                    "DELETE FROM T_HR_TELEFONES WHERE id_telefone IN (SELECT id_telefone FROM T_HR_ACOMPANHANTES WHERE id_paciente = ?)")) {
+                ps2.setLong(1, id);
+                ps2.executeUpdate();
+            }
+
+            try (PreparedStatement ps3 = conn.prepareStatement(
+                    "DELETE FROM T_HR_ACOMPANHANTES WHERE id_paciente = ?")) {
+                ps3.setLong(1, id);
+                ps3.executeUpdate();
+            }
+
+            try (PreparedStatement ps4 = conn.prepareStatement(
+                    "DELETE FROM T_HR_TELEFONES WHERE id_telefone = (SELECT id_telefone FROM T_HR_PACIENTES WHERE id_paciente = ?)")) {
+                ps4.setLong(1, id);
+                ps4.executeUpdate();
+            }
+
+            try (PreparedStatement ps5 = conn.prepareStatement(
+                    "DELETE FROM T_HR_ENDERECOS WHERE id_endereco = (SELECT id_endereco FROM T_HR_PACIENTES WHERE id_paciente = ?)")) {
+                ps5.setLong(1, id);
+                ps5.executeUpdate();
+            }
+
+            try (PreparedStatement ps6 = conn.prepareStatement(
+                    "DELETE FROM T_HR_PACIENTES WHERE id_paciente = ?")) {
+                ps6.setLong(1, id);
+                return ps6.executeUpdate() > 0;
+            }
+
         } catch (Exception e) {
             System.out.println("Erro ao excluir paciente: " + e.getMessage());
         } finally {

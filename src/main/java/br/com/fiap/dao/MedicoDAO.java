@@ -3,6 +3,7 @@ package br.com.fiap.dao;
 import br.com.fiap.to.MedicoTO;
 import br.com.fiap.to.TelefoneTO;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -69,18 +70,26 @@ public class MedicoDAO {
     }
 
     public boolean delete(Long id) {
-        String sql = "DELETE FROM T_HR_MEDICOS WHERE id_medico = ?";
+        try (Connection conn = ConnectionFactory.getConnection()) {
 
-        try {
-            MedicoTO medico = findById(id);
-            if (medico != null && medico.getTelefone() != null) {
-                new TelefoneDAO().delete(medico.getTelefone().getId());
+            try (PreparedStatement ps1 = conn.prepareStatement(
+                    "DELETE FROM T_HR_CONSULTAS WHERE id_medico = ?")) {
+                ps1.setLong(1, id);
+                ps1.executeUpdate();
             }
 
-            try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
-                preparedStatement.setLong(1, id);
-                return preparedStatement.executeUpdate() > 0;
+            try (PreparedStatement ps2 = conn.prepareStatement(
+                    "DELETE FROM T_HR_TELEFONES WHERE id_telefone = (SELECT id_telefone FROM T_HR_MEDICOS WHERE id_medico = ?)")) {
+                ps2.setLong(1, id);
+                ps2.executeUpdate();
             }
+
+            try (PreparedStatement ps3 = conn.prepareStatement(
+                    "DELETE FROM T_HR_MEDICOS WHERE id_medico = ?")) {
+                ps3.setLong(1, id);
+                return ps3.executeUpdate() > 0;
+            }
+
         } catch (Exception e) {
             System.out.println("Erro ao excluir medico: " + e.getMessage());
         } finally {
