@@ -120,7 +120,7 @@ public class UsuarioDAO {
     }
 
     public LoginTO login(String email, String senha) {
-        String sql = "SELECT usuario.id_usuario usuario.em_usuario, usuario.pw_usuario FROM T_HR_USUARIOS usuario WHERE em_usuario = ? AND pw_usuario = ?";
+        String sql = "SELECT usuario.id_usuario, usuario.em_usuario, usuario.pw_usuario FROM T_HR_USUARIOS usuario WHERE em_usuario = ? AND pw_usuario = ?";
         LoginTO login = null;
 
         try (PreparedStatement preparedStatement = ConnectionFactory.getConnection().prepareStatement(sql)) {
