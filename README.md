@@ -113,3 +113,17 @@ cd hera-api
 ```
 
 A aplicação ficará disponível em:  ``` http://localhost:8080/hera-api ```
+
+---
+
+## 🧾 Licença
+
+Este projeto foi desenvolvido para fins acadêmicos e está sob uso educacional.
+© 2025 Hera Corporation. Todos os direitos reservados.
+
+---
+
+## 📞 Contato
+
+Em caso de dúvidas ou contribuições, entre em contato com os desenvolvedores:
+`📧 olavo9neves@gmail.com `
